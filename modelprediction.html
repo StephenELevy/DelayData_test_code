@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- <title>U.S. Airport Flight Departures (on-Time or Late?)</title> -->
+
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js" 
+    integrity="sha256-FgpCb/KJQ1LNfOu91ta32o/NMZx1twRo8QtmkMRdAu8"
+    crossorigin="anonymous"></script>
+
+    <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+
+  <!--<link rel="stylesheet" href="static/css/style.css"> -->
+  </head>
+
+  <body class="bg-dark" >
+    <div class="container" style="background-color: rgb(181, 179, 235)!important; color:#4c2be2">
+        <br>
+        <div class="row">
+            <h1 style="margin-left:100px;font-weight: bold">Welcome to Airline Departures Machine Learning Model</h1>
+            <a style="margin-left:500px; font-size:xx-large;" href="/predictonesample">Model Prediction (On-time departure or late?)</a>
+        </div>
+        <br>
+        <div class="row">
+            <img style="margin-left:30px;" class=" rounded-circle mx-auto" scr="{{url_for('static', filename='images/img1.png')}}" alt="image" >
+        </div>
+        <br>
+        <br>
+    </div>
+   
+    
+
+    <!--Original script from Module 11 challenge -->
+      <div class="jumbotron">
+        <h1 class="display-4">Predictions for On-Time & Late Departures at Major U.S. Airports</h1>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+        </div>
+          <div class="col-md-4">
+            <h2 class='captionOfmyPage'>What U.S. Airports have the Best record for on-time departures? and the Worst record for late departures?</h2>
+          </div>
+
+          <div class="col-md-8">
+ <!----           <p>
+              Predictions for on-time and late departures!
+            </p> -->
+          </div>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-offset-2 col-md-8 ">
+                <form method="POST" action="/predictonesample" role="form", name="petform">
+                  <div class="form-group">
+                      <label style="margin-left: 12px;">Month</label>
+                      <input type="number" class="form-control" id="input1" name="MONTH" placeholder="7" value="{{form_data.MONTH}}" step="1" min="1" max="12" />
+                      <label style="margin-left: 12px;">Day of Week</label>
+                      <input type="number" class="form-control" id="input2" name="DAY_OF_WEEK" placeholder="4" value="{{form_data.DAY_OF_WEEK}}" step="1" min="1" max="7" />
+                      <label style="margin-left: 12px;">Distance Group</label>
+                      <input type="number" class="form-control" id="input3" name="DISTANCE_GROUP" placeholder="6" value="{{form_data.DISTANCE_GROUP}}" step="1" min="1" max="11`" />
+                      <label style="margin-left: 12px;">Segment Number</label>
+                      <input type="number" class="form-control" id="input4" name="SEGMENT_NUMBER" placeholder="8" value="{{form_data.SEGMENT_NUMBER}}" step="1" min="1" max="15" />
+                      <label style="margin-left: 12px;">Concurrent Flights</label>
+                      <input type="number" class="form-control" id="input5" name="CONCURRENT_FLIGHTS" placeholder="65" value="{{form_data.CONCURRENT_FLIGHTS}}" step="1" min="1" max="109" />
+                      <label style="margin-left: 12px;">Number of Seats</label>
+                      <input type="number" class="form-control" id="input6" name="NUMBER_OF_SEATS" placeholder="200" value="{{form_data.NUMBER_OF_SEATS}}" step="1" min="44" max="337" />                 
+                      <label style="margin-left: 12px;">Airport Flights per Month</label>
+                      <input type="number" class="form-control" id="input7" name="AIRPORTS_FLIGHTS_MONTH" placeholder="20000" value="{{form_data.AIRPORTS_FLIGHTS_MONTH}}" step="1" min="1100" max="35256" />                 
+                      <label style="margin-left: 12px;">Airline Flights per Month</label>
+                      <input type="number" class="form-control" id="input8" name="AIRLINE_FLIGHTS_MONTH" placeholder="60000" value="{{form_data.AIRLINE_FLIGHTS_MONTH}}" step="1" min="5582" max="117728" />   
+                      <label style="margin-left: 12px;">Airline Airport Flights per Month</label>
+                      <input type="number" class="form-control" id="input9" name="AIRLINE_AIRPORT_FLIGHTS_MONTH" placeholder="10000" value="{{form_data.AIRLINE_AIRPORT_FLIGHTS_MONTH}}" step="1" min="1" max="21837" />   
+                      <label style="margin-left: 12px;">Average Monthly Passengers per Airport</label>
+                      <input type="number" class="form-control" id="input10" name="AVG_MONTHLY_PASS_AIRPORT" placeholder="2000000" value="{{form_data.AVG_MONTHLY_PASS_AIRPORT}}" step="1000" min="70476" max="4365661" />   
+                      <label style="margin-left: 12px;">Average Monthly Passengers per Airline</label>
+                      <input type="number" class="form-control" id="input11" name="AVG_MONTHLY_PASS_AIRLINE" placeholder="2000000" value="{{form_data.AVG_MONTHLY_PASS_AIRLINE}}" step="200000" min="473794" max="13383000" />   
+                      <label style="margin-left: 12px;">Flights Attendants per Passenger</label>
+                      <input type="number" class="form-control" id="input12" name="FLT_ATTENDANTS_PER_PASS" placeholder="0.0002" value="{{form_data.FLT_ATTENDANTS_PER_PASS}}" step="0.00005" min="0.0" max="0.000348407664" />
+                      <label style="margin-left: 12px;">Ground Crew per Passenger</label>
+                      <input type="number" class="form-control" id="input13" name="GROUND_SERV_PER_PASS" placeholder="0.00015" value="{{form_data.GROUND_SERV_PER_PASS}}" step=".00000001" min="7.13-06" max=".0002289854" />   
+                      <label style="margin-left: 12px;">Plane Age</label>
+                      <input type="number" class="form-control" id="input14" name="PLANE_AGE" placeholder="12" value="{{form_data.PLANE_AGE}}" step="1"  min="0" max="32" />   
+                      <label style="margin-left: 12px;">Precipitation</label>
+                      <input type="number" class="form-control" id="input15" name="PRCP" placeholder="0" value="{{form_data.PRCP}}" step="0.1" min="0" max="6" />
+                      <label style="margin-left: 12px;">Snow</label>
+                      <input type="number" class="form-control" id="input16" name="SNOW" placeholder="0" value="{{form_data.SNOW}}" step="0.1" min="0" max="12" />
+                      <label style="margin-left: 12px;">SNWD</label>
+                      <input type="number" class="form-control" id="input17" name="SNWD" placeholder="0" value="{{form_data.SNWD}}" step=".0.1" min="0" max="96" />
+                      <label style="margin-left: 12px;">Max Temperature (degrees F)</label>
+                      <input type="number" class="form-control" id="input18" name="TMAX" placeholder="75" value="{{form_data.TMAX}}" step="1" min="-40" max="120" />
+                      <label style="margin-left: 12px;">AWND</label>
+                      <input type="number" class="form-control" id="input19" name="AWND" placeholder="0" value="{{form_data.AWND}}" step="0.1" min="0" max="40" />
+                      <br>
+                      <!-- name="Departure Time Blocks" size="5" multiple> -->
+                      <label style="margin-left: 12px;"> Departure Time Blocks</label>
+                      <select name="DEP_TIME_BLK" >
+                        <!--<option value=""> </option> -->
+                        <option disabled selected value> -- select an option -- </option>
+                        <!--<option value="0001_0559"> </option> -->
+                        <option value="0001_0559" {% if form_data.DEP_TIME_BLK == "0001_0559" %} selected {% endif %}> 0001_0559 </option>
+                        <!--<option value="0600_0659"> </option> -->
+                        <option value="0600_0659" {% if form_data.DEP_TIME_BLK == "0600_0659" %} selected {% endif %}> 0600_0659 </option>
+                        <!--<option value="0700_0759"> </option> -->
+                        <option value="0700_0759" {% if form_data.DEP_TIME_BLK == "0700_0759" %} selected {% endif %}> 0700_0759 </option>
+                        <!--<option value="0800_0859"> </option> -->
+                        <option value="0800_0859" {% if form_data.DEP_TIME_BLK == "0800_0859" %} selected {% endif %}> 0800_0859 </option>
+                        <!--<option value="0900_0959"> </option> -->
+                        <option value="0900_0959" {% if form_data.DEP_TIME_BLK == "0900_0959" %} selected {% endif %}> 0900_0959 </option>
+                        <!--<option value="1000_1059"> </option> -->
+                        <option value="1000_1059" {% if form_data.DEP_TIME_BLK == "1000_1059" %} selected {% endif %}> 1000_1059 </option>
+                        <!--<option value="1100_1159"> </option> -->
+                        <option value="1100_1159" {% if form_data.DEP_TIME_BLK == "1100_1159" %} selected {% endif %}> 1100_1159 </option>
+                        <!--<option value="1200_1259"> </option> -->
+                        <option value="1200_1259" {% if form_data.DEP_TIME_BLK == "1200_1259" %} selected {% endif %}> 1200_1259 </option>
+                        <!--<option value="1300_1359"> </option> -->
+                        <option value="1300_1359" {% if form_data.DEP_TIME_BLK == "1300_1359" %} selected {% endif %}> 1300_1359 </option>
+                        <!--<option value="1400_1459"> </option> -->
+                        <option value="1400_1459" {% if form_data.DEP_TIME_BLK == "1400_1459" %} selected {% endif %}> 1400_1459 </option>
+                        <!--<option value="1500_1559"> </option> -->
+                        <option value="1500_1559" {% if form_data.DEP_TIME_BLK == "1500_1559" %} selected {% endif %}> 1500_1559 </option>
+                        <!--<option value="1600_1659"> </option> -->
+                        <option value="1600_1659" {% if form_data.DEP_TIME_BLK == "1600_1659" %} selected {% endif %}> 1600_1659 </option>
+                        <!--<option value="1700_1759"> </option> -->
+                        <option value="1700_1759" {% if form_data.DEP_TIME_BLK == "1700_1759" %} selected {% endif %}> 1700_1759 </option>
+                        <!--<option value="1800_1859"> </option> -->
+                        <option value="1800_1859" {% if form_data.DEP_TIME_BLK == "1800_1859" %} selected {% endif %}> 1800_1859 </option>
+                        <!--<option value="1900_1959"> </option> -->
+                        <option value="1900_1959" {% if form_data.DEP_TIME_BLK == "1900_1959" %} selected {% endif %}> 1900_1959 </option>
+                        <!--<option value="2000_2059"> </option> -->
+                        <option value="2000_2059" {% if form_data.DEP_TIME_BLK == "2000_2059" %} selected {% endif %}> 2000_2059 </option>
+                        <!--<option value="2100_2159"> </option> -->
+                        <option value="2100_2159" {% if form_data.DEP_TIME_BLK == "2100_2159" %} selected {% endif %}> 2100_2159 </option>
+                        <!--<option value="2200_2259"> </option> -->
+                        <option value="2200_2259" {% if form_data.DEP_TIME_BLK == "2200_2259" %} selected {% endif %}> 2200_2259 </option>
+                        <!--<option value="2300_2359"> </option> -->
+                        <option value="2300_2359" {% if form_data.DEP_TIME_BLK == "2300_2359" %} selected {% endif %}> 2300_2359 </option>
+                      </select>
+                      
+                      <!-- name="Carrier Names" size="5" multiple> -->
+                      <label style="margin-left: 12px;"> Carrier Names </label>
+                      <select name="CARRIER_NAME" >
+                        <!--<option value=""> </option> -->
+                        <option disabled selected value> -- select an option -- </option>
+                        <!--<option value="Alaska_Airlines_Inc"> </option> -->
+                        <option value="Alaska_Airlines_Inc" {% if form_data.CARRIER_NAME == "Alaska_Airlines_Inc" %} selected {% endif %}> Alaska_Airlines_Inc </option>
+                        <!--<option value="Allegiant_Air"> </option> -->
+                        <option value="Allegiant_Air" {% if form_data.CARRIER_NAME == "Allegiant_Air" %} selected {% endif %}> Allegiant_Air </option>
+                        <!--<option value="American_Airlines_Inc"> </option> -->
+                        <option value="American_Airlines_Inc" {% if form_data.CARRIER_NAME == "American_Airlines_Inc" %} selected {% endif %}> American_Airlines_Inc </option>
+                        <!--<option value="American_Eagle_Airlines_Inc"> </option> -->
+                        <option value="American_Eagle_Airlines_Inc" {% if form_data.CARRIER_NAME == "American_Eagle_Airlines_Inc" %} selected {% endif %}> American_Eagle_Airlines_Inc </option>
+                        <!--<option value="Atlantic_Southeast_Airlines"> </option> -->
+                        <option value="Atlantic_Southeast_Airlines" {% if form_data.CARRIER_NAME == "Atlantic_Southeast_Airlines" %} selected {% endif %}> Atlantic_Southeast_Airlines </option>
+                        <!--<option value="Comair_Inc"> </option> -->
+                        <option value="Comair_Inc" {% if form_data.CARRIER_NAME == "Comair_Inc" %} selected {% endif %}> Comair_Inc </option>
+                        <!--<option value="Delta_Air_Lines_Inc"> </option> -->
+                        <option value="Delta_Air_Lines_Inc" {% if form_data.CARRIER_NAME == "Delta_Air_Lines_Inc" %} selected {% endif %}> Delta_Air_Lines_Inc </option>
+                        <!--<option value="Endeavor_Air_Inc"> </option> -->
+                        <option value="Endeavor_Air_Inc" {% if form_data.CARRIER_NAME == "Endeavor_Air_Inc" %} selected {% endif %}> Endeavor_Air_Inc </option>
+                        <!--<option value="Frontier_Airlines_Inc"> </option> -->
+                        <option value="Frontier_Airlines_Inc" {% if form_data.CARRIER_NAME == "Frontier_Airlines_Inc" %} selected {% endif %}> Frontier_Airlines_Inc </option>
+                        <!--<option value="Hawaiian_Airlines_Inc"> </option> -->
+                        <option value="Hawaiian_Airlines_Inc" {% if form_data.CARRIER_NAME == "Hawaiian_Airlines_Inc" %} selected {% endif %}> Hawaiian_Airlines_Inc </option>
+                        <!--<option value="JetBlue_Airways"> </option> -->
+                        <option value="JetBlue_Airways" {% if form_data.CARRIER_NAME == "JetBlue_Airways" %} selected {% endif %}> JetBlue_Airways </option>
+                        <!--<option value="Mesa_Airlines_Inc"> </option> -->
+                        <option value="Mesa_Airlines_Inc" {% if form_data.CARRIER_NAME == "Mesa_Airlines_Inc" %} selected {% endif %}> Mesa_Airlines_Inc </option>
+                        <!--<option value="Midwest_Airline,_Inc"> </option> -->
+                        <option value="Midwest_Airline,_Inc" {% if form_data.CARRIER_NAME == "Midwest_Airline,_Inc" %} selected {% endif %}> Midwest_Airline,_Inc </option>
+                        <!--<option value="SkyWest_Airlines_Inc"> </option> -->
+                        <option value="SkyWest_Airlines_Inc" {% if form_data.CARRIER_NAME == "SkyWest_Airlines_Inc" %} selected {% endif %}> SkyWest_Airlines_Inc </option>
+                        <!--<option value="Southwest_Airlines_Inc"> </option> -->
+                        <option value="Southwest_Airlines_Co" {% if form_data.CARRIER_NAME == "Southwest_Airlines_Co" %} selected {% endif %}> Southwest_Airlines_Co </option>
+                        <!--<option value="Spirit_Air_Lines"> </option> -->
+                        <option value="Spirit_Air_Lines" {% if form_data.CARRIER_NAME == "Spirit_Air_Lines" %} selected {% endif %}> Spirit_Air_Lines </option>
+                        <!--<option value="United_Air_Lines_Inc"> </option> -->
+                        <option value="United_Air_Lines_Inc" {% if form_data.CARRIER_NAME == "United_Air_Lines_Inc" %} selected {% endif %}> United_Air_Lines_Inc </option>
+                      </select>
+                      
+                      <!-- name="Departing Airports" size="5" multiple> -->
+                      <label style="margin-left: 12px;"> Departing Airports </label>
+                      <select name="DEPARTING_AIRPORT" >
+                        <!--<option value=""> </option> -->
+                        <option disabled selected value> -- select an option -- </option>
+                        <!--<option value="Chicago_OHare_International"> </option> -->
+                        <option value="Chicago_OHare_International" {% if form_data.DEPARTING_AIRPORT == "Chicago_OHare_International" %} selected {% endif %}> Chicago_OHare_International </option>
+                        <!--<option value="Houston_Intercontinental"> </option> -->
+                        <option value="Houston_Intercontinental" {% if form_data.DEPARTING_AIRPORT == "Houston_Intercontinental" %} selected {% endif %}> Houston_Intercontinental </option>
+                        <!--<option value="Los_Angeles_International"> </option> -->
+                        <option value="Los_Angeles_International" {% if form_data.DEPARTING_AIRPORT == "Los_Angeles_International" %} selected {% endif %}> Los_Angeles_International </option>
+                      </select>
+                    </div>
+
+                    <!-- type="submit" value="submit" id="input1" class="btn btn-default modelSubmit"> -->
+                    <button style="margin-left:12px;" id="predict-btn" type="submit" class="btn btn-defaults">Predict</button>
+                    <label style="margin-left:50px; color:rgba(235, 23, 62)"> Prediction Result</label>
+                    <label style="margin-left:25px; color:rgb(235, 23, 62)" id="result"> {{prediction}} </label> 
+                    <label style="margin-left:25px; color:rgb(235, 23, 94)" id="msg"> {{msg}} </label> 
+                    <!-- <button style="margin-left:50px;" type="reset" value="Reset"</button> -->
+                    <!-- <input type="reset" value="Reset"/> -->
+                    <br>
+                    <br>
+                </form>
+
+              </div>
+            </div>
+
+          </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js"></script>
+<!--<script src="./static/js/app.js"></script>-->
+  </body>
+  </html>
